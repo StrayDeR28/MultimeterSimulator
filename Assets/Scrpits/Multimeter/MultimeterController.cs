@@ -9,7 +9,7 @@ namespace Assets.Scrpits.Multimeter
     {
         public event Action<MeasurementMode, float> MeasurementModeChanged;
 
-        [SerializeField] private DCSource testDCSource; // for test set from inspector
+        [SerializeField] private DCSource testDCSource; // for test task
         [SerializeField] private MultimeterArrow arrow;
 
         public bool IsPointerOnArrow { get; private set; }
@@ -22,7 +22,7 @@ namespace Assets.Scrpits.Multimeter
         {
             InitializeMeasurementGetters();
             
-            SetNewDCSource(testDCSource); // for test
+            SetNewDCSource(testDCSource); // for test task
 
             arrow.PointerEnterArrow += OnPointerEnterArrow;
             arrow.PointerExitArrow += OnPointerExitArrow;
@@ -57,44 +57,45 @@ namespace Assets.Scrpits.Multimeter
 
         private void Update() 
         {
-            if (!IsPointerOnArrow) 
+            if (IsPointerOnArrow) 
             {
-                return;
+                HandleScrollInput();
             }
-
-            float scroll = Input.mouseScrollDelta.y;
-            if (Mathf.Approximately(scroll, 0f)) 
-            {
-                return;
-            }
-
-            int currentIdx = (int)_multimeterModel.сurrentMeasurementMode;
-            int newIdx;
-
-            if (scroll > 0)
-            {
-                newIdx = currentIdx + 1;
-                if (newIdx > _maxMeasurementMode) 
-                {
-                    newIdx = 0;
-                }
-            }
-            else
-            {
-                newIdx = currentIdx - 1;
-                if (newIdx < 0)
-                {
-                    newIdx = _maxMeasurementMode;   
-                }
-            }
-
-            _multimeterModel.сurrentMeasurementMode = (MeasurementMode)newIdx;
-            MeasurementModeChanged?.Invoke(_multimeterModel.сurrentMeasurementMode, GetCurrentMeasurment());
         }
 
-        private float GetCurrentMeasurment()
+        private void HandleScrollInput()
         {
-            return _measurementGetters[_multimeterModel.сurrentMeasurementMode]();
+            float scroll = Input.mouseScrollDelta.y;
+            if (Mathf.Approximately(scroll, 0f))
+            {
+                return;
+            }
+
+            int direction = scroll > 0 ? 1 : -1;
+            ChangeMeasurementMode(direction);
+        }
+
+        private void ChangeMeasurementMode(int direction)
+        {
+            int currentIdx = (int)_multimeterModel.CurrentMeasurementMode;
+            int newIdx = currentIdx + direction;
+
+            if (newIdx > _maxMeasurementMode)
+            {
+                newIdx = 0;
+            }
+            if (newIdx < 0)
+            {
+                newIdx = _maxMeasurementMode;
+            }
+            
+            _multimeterModel.CurrentMeasurementMode = (MeasurementMode)newIdx;
+            MeasurementModeChanged?.Invoke(_multimeterModel.CurrentMeasurementMode, GetCurrentMeasurement());
+        }
+
+        private float GetCurrentMeasurement()
+        {
+            return _measurementGetters[_multimeterModel.CurrentMeasurementMode]();
         }
 
         private void OnDestroy() 

@@ -4,8 +4,7 @@ namespace Assets.Scrpits.Multimeter
 {
     public class MultimeterModel
     {
-        public MeasurementMode сurrentMeasurementMode = MeasurementMode.Neutral;
-
+        public MeasurementMode CurrentMeasurementMode { get; set; } = MeasurementMode.Neutral;
         public float DCVoltage { get; private set; } = 0f;
         public float ACVoltage { get; private set; } = 0.01f;
         public float Power { get; private set; } = 0f;

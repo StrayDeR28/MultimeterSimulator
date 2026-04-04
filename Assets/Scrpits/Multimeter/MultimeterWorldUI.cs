@@ -16,6 +16,8 @@ namespace Assets.Scrpits.Multimeter
         private Color _baseEmissionColor;
         private Transform _arrowTransform;
         private float _rotationAngle = 0f;
+        
+        private const string EmissionColorPropertyName = "_EmissionColor";
 
         private void Awake()
         {
@@ -39,9 +41,9 @@ namespace Assets.Scrpits.Multimeter
                 return;
             }
             
-            if (_arrowMaterial.HasProperty("_EmissionColor"))
+            if (_arrowMaterial.HasProperty(EmissionColorPropertyName))
             {
-                _baseEmissionColor = _arrowMaterial.GetColor("_EmissionColor");
+                _baseEmissionColor = _arrowMaterial.GetColor(EmissionColorPropertyName);
                 _arrowMaterial.EnableKeyword("_EMISSION");
             }
             else
@@ -75,18 +77,18 @@ namespace Assets.Scrpits.Multimeter
 
         private void HiglightArrow()
         {
-            if (_arrowMaterial.HasProperty("_EmissionColor"))
+            if (_arrowMaterial.HasProperty(EmissionColorPropertyName))
             {
                 Color emissionColor = arrowHighlightEmissionColor * emissionIntensity;
-                _arrowMaterial.SetColor("_EmissionColor", emissionColor);
+                _arrowMaterial.SetColor(EmissionColorPropertyName, emissionColor);
             }
         }
 
         private void SetArrowMaterialDefaults()
         {
-            if (_arrowMaterial.HasProperty("_EmissionColor"))
+            if (_arrowMaterial.HasProperty(EmissionColorPropertyName))
             {
-                _arrowMaterial.SetColor("_EmissionColor", _baseEmissionColor);
+                _arrowMaterial.SetColor(EmissionColorPropertyName, _baseEmissionColor);
             }
         }
 
@@ -103,7 +105,7 @@ namespace Assets.Scrpits.Multimeter
             _rotationAngle = MultimeterUIData.GetRotationAngle(measurementMode);
         }
 
-        private string FormatForDisplay(float value)
+        private static string FormatForDisplay(float value)
         {
             const int maxNumberLength = 5;
             string[] formats = { "F2", "F1", "F0" };

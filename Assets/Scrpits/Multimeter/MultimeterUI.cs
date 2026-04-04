@@ -23,6 +23,8 @@ namespace Assets.Scrpits.Multimeter
             _defaultCurrent = $"{MultimeterUIData.GetUiSymbol(MeasurementMode.CurrentStrength)}: 0";
             _defaultResistance = $"{MultimeterUIData.GetUiSymbol(MeasurementMode.Resistance)}: 0";
 
+            SetDefaultMeasurements();
+
             multimeterController.MeasurementModeChanged += MeasurementModeChanged;
         }
 
