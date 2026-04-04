@@ -1590,9 +1590,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   multimeterController: {fileID: 3469287838110628004}
   arrow: {fileID: 432906490160310599}
-  arrowHiglightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   measurementValue: {fileID: 1465674955}
-  rotationSpeed: 500
+  arrowHighlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  emissionIntensity: 0.2
+  arrowRotationSpeed: 500
 --- !u!23 &4226994463787334229
 MeshRenderer:
   m_ObjectHideFlags: 0
