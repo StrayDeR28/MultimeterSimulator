@@ -11,40 +11,54 @@ namespace Assets.Scrpits.Multimeter
         [SerializeField] private TMP_Text currentStrength;
         [SerializeField] private TMP_Text resistance;
 
+        private string _defaultDCVoltage;
+        private string _defaultACVoltage;
+        private string _defaultCurrent;
+        private string _defaultResistance;
+
         private void Awake() 
         {
-            SetDefaultMeasurements();
+            _defaultDCVoltage = $"{MultimeterUIData.GetUiSymbol(MeasurmentMode.DCVoltage)}: 0";
+            _defaultACVoltage = $"{MultimeterUIData.GetUiSymbol(MeasurmentMode.ACVoltage)}: 0";
+            _defaultCurrent = $"{MultimeterUIData.GetUiSymbol(MeasurmentMode.CurrentStrength)}: 0";
+            _defaultResistance = $"{MultimeterUIData.GetUiSymbol(MeasurmentMode.Resistance)}: 0";
 
             multimeterController.MeasurementModeChanged += MeasurementModeChanged;
         }
 
         private void SetDefaultMeasurements()
         {
-            dCVoltage.text = "V: 0";
-            aCVoltage.text = "~: 0";
-            currentStrength.text = "A: 0";
-            resistance.text = "Ω: 0";
+            dCVoltage.text = _defaultDCVoltage;
+            aCVoltage.text = _defaultACVoltage;
+            currentStrength.text = _defaultCurrent;
+            resistance.text = _defaultResistance;
         }
 
         private void MeasurementModeChanged(MeasurmentMode measurmentMode, float currentMeasurment)
         {
             SetDefaultMeasurements();
 
+            string symbol = MultimeterUIData.GetUiSymbol(measurmentMode);
+            if (string.IsNullOrEmpty(symbol))
+            {
+                return;
+            }
+
+            string displayText = $"{symbol}: {currentMeasurment.ToString("F2")}";
+
             switch (measurmentMode)
             {
-                case MeasurmentMode.Neutral:
-                    return;
                 case MeasurmentMode.DCVoltage:
-                    dCVoltage.text = "V: " + currentMeasurment.ToString("F2");
+                    dCVoltage.text = displayText;
                     break;
                 case MeasurmentMode.ACVoltage:
-                    aCVoltage.text = "~: " + currentMeasurment.ToString("F2");
+                    aCVoltage.text = displayText;
                     break;
                 case MeasurmentMode.CurrentStrength:
-                    currentStrength.text = "A: " + currentMeasurment.ToString("F2");
+                    currentStrength.text = displayText;
                     break;
                 case MeasurmentMode.Resistance:
-                    resistance.text = "Ω: " + currentMeasurment.ToString("F2");
+                    resistance.text = displayText;
                     break;
             }
         }

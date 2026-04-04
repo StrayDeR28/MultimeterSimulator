@@ -28,6 +28,7 @@ namespace Assets.Scrpits.Multimeter
             }
 
             _arrowTransform = arrow.transform;
+            mainNumbers.text = "0";
 
             multimeterController.MeasurementModeChanged += MeasurementModeChanged;
         }
@@ -48,7 +49,6 @@ namespace Assets.Scrpits.Multimeter
                 _arrowMaterial.color = _baseArrowColor;
             }
 
-
             Vector3 currentRotation = _arrowTransform.eulerAngles;
             float newZ = Mathf.MoveTowardsAngle(currentRotation.z, _rotationAngle, rotationSpeed * Time.deltaTime);
             _arrowTransform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, newZ);
@@ -57,25 +57,7 @@ namespace Assets.Scrpits.Multimeter
         private void MeasurementModeChanged(MeasurmentMode measurmentMode, float currentMeasurment)
         {
             mainNumbers.text = currentMeasurment.ToString("F2");
-
-            switch (measurmentMode)
-            {
-                case MeasurmentMode.Neutral:
-                    _rotationAngle = 0f;
-                    break;
-                case MeasurmentMode.DCVoltage:
-                    _rotationAngle = 76f;
-                    break;
-                case MeasurmentMode.ACVoltage:
-                    _rotationAngle = 133f;
-                    break;
-                case MeasurmentMode.CurrentStrength:
-                    _rotationAngle = 150f;
-                    break;
-                case MeasurmentMode.Resistance:
-                    _rotationAngle = 284f;
-                    break;
-            }
+            _rotationAngle = MultimeterUIData.GetRotationAngle(measurmentMode);
         }
 
         private void OnDestroy() 

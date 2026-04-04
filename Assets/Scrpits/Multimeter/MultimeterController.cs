@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Assets.Scrpits.ScriptableObjects;
 using UnityEngine;
 
@@ -15,13 +16,28 @@ namespace Assets.Scrpits.Multimeter
 
         private readonly MultimeterModel _multimeterModel = new();
         private readonly int _maxMeasurmentMode = Enum.GetValues(typeof(MeasurmentMode)).Length - 1;
+        private Dictionary<MeasurmentMode, Func<float>> _measurementGetters;
         
         private void Awake()
         {
+            InitializeMeasurementGetters();
+            
             SetNewDCSource(testDCSource); // for test
 
             arrow.PointerEnterArrow += OnPointerEnterArrow;
             arrow.PointerExitArrow += OnPointerExitArrow;
+        }
+
+        private void InitializeMeasurementGetters()
+        {
+            _measurementGetters = new Dictionary<MeasurmentMode, Func<float>>
+            {
+                { MeasurmentMode.Neutral, () => 0f },
+                { MeasurmentMode.DCVoltage, () => _multimeterModel.DCVoltage },
+                { MeasurmentMode.ACVoltage, () => _multimeterModel.ACVoltage },
+                { MeasurmentMode.CurrentStrength, () => _multimeterModel.CurrentStrength },
+                { MeasurmentMode.Resistance, () =>_multimeterModel.Resistance },
+            };
         }
 
         public void SetNewDCSource(DCSource dCSource)
@@ -78,28 +94,7 @@ namespace Assets.Scrpits.Multimeter
 
         private float GetCurrentMeasurment()
         {
-            float currentMeasurment = 0f;
-
-            switch (_multimeterModel.сurrentMeasurmentMode)
-            {
-                case MeasurmentMode.Neutral:
-                    currentMeasurment = 0f;
-                    break;
-                case MeasurmentMode.DCVoltage:
-                    currentMeasurment = _multimeterModel.DCVoltage;
-                    break;
-                case MeasurmentMode.ACVoltage:
-                    currentMeasurment = _multimeterModel.ACVoltage;
-                    break;
-                case MeasurmentMode.CurrentStrength:
-                    currentMeasurment = _multimeterModel.CurrentStrength;
-                    break;
-                case MeasurmentMode.Resistance:
-                    currentMeasurment = _multimeterModel.Resistance;
-                    break;
-            }
-
-            return currentMeasurment;
+            return _measurementGetters[_multimeterModel.сurrentMeasurmentMode]();
         }
 
         private void OnDestroy() 
