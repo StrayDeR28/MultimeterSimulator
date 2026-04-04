@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 248400428}
   - component: {fileID: 248400427}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: MultimeterDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 712599126}
   - component: {fileID: 712599125}
   m_Layer: 5
-  m_Name: AC_Voltage
+  m_Name: ACVoltage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -564,7 +564,7 @@ GameObject:
   - component: {fileID: 722693274}
   - component: {fileID: 722693275}
   m_Layer: 5
-  m_Name: UI_Multimeter_Measurements
+  m_Name: UI_MultimeterMeasurements
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -919,7 +919,7 @@ GameObject:
   - component: {fileID: 1442859333}
   - component: {fileID: 1442859332}
   m_Layer: 5
-  m_Name: Current_Strength
+  m_Name: CurrentStrength
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1054,7 +1054,7 @@ GameObject:
   - component: {fileID: 1465674956}
   - component: {fileID: 1465674955}
   m_Layer: 5
-  m_Name: MainNumbers
+  m_Name: MeasurementValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1100,7 +1100,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1000
+  m_text: 632,5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 98432cdaf90d1ec4d97a72ef4870a908, type: 2}
   m_sharedMaterial: {fileID: -8516525943091191334, guid: 98432cdaf90d1ec4d97a72ef4870a908, type: 2}
@@ -1163,7 +1163,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0.6499435, w: 0}
+  m_margin: {x: 0.32968128, y: 0, z: 0.3406247, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1324,7 +1324,7 @@ GameObject:
   - component: {fileID: 1675501551}
   - component: {fileID: 1675501550}
   m_Layer: 5
-  m_Name: DC_Voltage
+  m_Name: DCVoltage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1591,7 +1591,8 @@ MonoBehaviour:
   multimeterController: {fileID: 3469287838110628004}
   arrow: {fileID: 432906490160310599}
   arrowHiglightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  mainNumbers: {fileID: 1465674955}
+  measurementValue: {fileID: 1465674955}
+  rotationSpeed: 500
 --- !u!23 &4226994463787334229
 MeshRenderer:
   m_ObjectHideFlags: 0

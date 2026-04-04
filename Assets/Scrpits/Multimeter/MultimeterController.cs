@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Assets.Scrpits.ScriptableObjects;
 using UnityEngine;
+using Assets.Scrpits.ScriptableObjects;
 
 namespace Assets.Scrpits.Multimeter
 {
     public class MultimeterController : MonoBehaviour
     {
-        public event Action<MeasurmentMode, float> MeasurementModeChanged;
+        public event Action<MeasurementMode, float> MeasurementModeChanged;
 
         [SerializeField] private DCSource testDCSource; // for test set from inspector
         [SerializeField] private MultimeterArrow arrow;
@@ -15,8 +15,8 @@ namespace Assets.Scrpits.Multimeter
         public bool IsPointerOnArrow { get; private set; }
 
         private readonly MultimeterModel _multimeterModel = new();
-        private readonly int _maxMeasurmentMode = Enum.GetValues(typeof(MeasurmentMode)).Length - 1;
-        private Dictionary<MeasurmentMode, Func<float>> _measurementGetters;
+        private readonly int _maxMeasurementMode = Enum.GetValues(typeof(MeasurementMode)).Length - 1;
+        private Dictionary<MeasurementMode, Func<float>> _measurementGetters;
         
         private void Awake()
         {
@@ -30,13 +30,13 @@ namespace Assets.Scrpits.Multimeter
 
         private void InitializeMeasurementGetters()
         {
-            _measurementGetters = new Dictionary<MeasurmentMode, Func<float>>
+            _measurementGetters = new Dictionary<MeasurementMode, Func<float>>
             {
-                { MeasurmentMode.Neutral, () => 0f },
-                { MeasurmentMode.DCVoltage, () => _multimeterModel.DCVoltage },
-                { MeasurmentMode.ACVoltage, () => _multimeterModel.ACVoltage },
-                { MeasurmentMode.CurrentStrength, () => _multimeterModel.CurrentStrength },
-                { MeasurmentMode.Resistance, () =>_multimeterModel.Resistance },
+                { MeasurementMode.Neutral, () => 0f },
+                { MeasurementMode.DCVoltage, () => _multimeterModel.DCVoltage },
+                { MeasurementMode.ACVoltage, () => _multimeterModel.ACVoltage },
+                { MeasurementMode.CurrentStrength, () => _multimeterModel.CurrentStrength },
+                { MeasurementMode.Resistance, () =>_multimeterModel.Resistance },
             };
         }
 
@@ -68,13 +68,13 @@ namespace Assets.Scrpits.Multimeter
                 return;
             }
 
-            int currentIdx = (int)_multimeterModel.сurrentMeasurmentMode;
+            int currentIdx = (int)_multimeterModel.сurrentMeasurementMode;
             int newIdx;
 
             if (scroll > 0)
             {
                 newIdx = currentIdx + 1;
-                if (newIdx > _maxMeasurmentMode) 
+                if (newIdx > _maxMeasurementMode) 
                 {
                     newIdx = 0;
                 }
@@ -84,17 +84,17 @@ namespace Assets.Scrpits.Multimeter
                 newIdx = currentIdx - 1;
                 if (newIdx < 0)
                 {
-                    newIdx = _maxMeasurmentMode;   
+                    newIdx = _maxMeasurementMode;   
                 }
             }
 
-            _multimeterModel.сurrentMeasurmentMode = (MeasurmentMode)newIdx;
-            MeasurementModeChanged?.Invoke(_multimeterModel.сurrentMeasurmentMode, GetCurrentMeasurment());
+            _multimeterModel.сurrentMeasurementMode = (MeasurementMode)newIdx;
+            MeasurementModeChanged?.Invoke(_multimeterModel.сurrentMeasurementMode, GetCurrentMeasurment());
         }
 
         private float GetCurrentMeasurment()
         {
-            return _measurementGetters[_multimeterModel.сurrentMeasurmentMode]();
+            return _measurementGetters[_multimeterModel.сurrentMeasurementMode]();
         }
 
         private void OnDestroy() 

@@ -4,7 +4,7 @@ namespace Assets.Scrpits.Multimeter
 {
     public class MultimeterModel
     {
-        public MeasurmentMode сurrentMeasurmentMode = MeasurmentMode.Neutral;
+        public MeasurementMode сurrentMeasurementMode = MeasurementMode.Neutral;
 
         public float DCVoltage { get; private set; } = 0f;
         public float ACVoltage { get; private set; } = 0.01f;
@@ -21,7 +21,7 @@ namespace Assets.Scrpits.Multimeter
             DCVoltage = PhysicsEquations.CalculateDCVoltage(power, CurrentStrength);
         }
     }
-    public enum MeasurmentMode
+    public enum MeasurementMode
     {
         Neutral,
         DCVoltage,

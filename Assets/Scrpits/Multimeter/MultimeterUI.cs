@@ -1,5 +1,5 @@
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 namespace Assets.Scrpits.Multimeter
 {
@@ -18,10 +18,10 @@ namespace Assets.Scrpits.Multimeter
 
         private void Awake() 
         {
-            _defaultDCVoltage = $"{MultimeterUIData.GetUiSymbol(MeasurmentMode.DCVoltage)}: 0";
-            _defaultACVoltage = $"{MultimeterUIData.GetUiSymbol(MeasurmentMode.ACVoltage)}: 0";
-            _defaultCurrent = $"{MultimeterUIData.GetUiSymbol(MeasurmentMode.CurrentStrength)}: 0";
-            _defaultResistance = $"{MultimeterUIData.GetUiSymbol(MeasurmentMode.Resistance)}: 0";
+            _defaultDCVoltage = $"{MultimeterUIData.GetUiSymbol(MeasurementMode.DCVoltage)}: 0";
+            _defaultACVoltage = $"{MultimeterUIData.GetUiSymbol(MeasurementMode.ACVoltage)}: 0";
+            _defaultCurrent = $"{MultimeterUIData.GetUiSymbol(MeasurementMode.CurrentStrength)}: 0";
+            _defaultResistance = $"{MultimeterUIData.GetUiSymbol(MeasurementMode.Resistance)}: 0";
 
             multimeterController.MeasurementModeChanged += MeasurementModeChanged;
         }
@@ -34,30 +34,30 @@ namespace Assets.Scrpits.Multimeter
             resistance.text = _defaultResistance;
         }
 
-        private void MeasurementModeChanged(MeasurmentMode measurmentMode, float currentMeasurment)
+        private void MeasurementModeChanged(MeasurementMode measurementMode, float currentMeasurement)
         {
             SetDefaultMeasurements();
 
-            string symbol = MultimeterUIData.GetUiSymbol(measurmentMode);
+            string symbol = MultimeterUIData.GetUiSymbol(measurementMode);
             if (string.IsNullOrEmpty(symbol))
             {
                 return;
             }
 
-            string displayText = $"{symbol}: {currentMeasurment.ToString("F2")}";
+            string displayText = $"{symbol}: {currentMeasurement.ToString("F2")}";
 
-            switch (measurmentMode)
+            switch (measurementMode)
             {
-                case MeasurmentMode.DCVoltage:
+                case MeasurementMode.DCVoltage:
                     dCVoltage.text = displayText;
                     break;
-                case MeasurmentMode.ACVoltage:
+                case MeasurementMode.ACVoltage:
                     aCVoltage.text = displayText;
                     break;
-                case MeasurmentMode.CurrentStrength:
+                case MeasurementMode.CurrentStrength:
                     currentStrength.text = displayText;
                     break;
-                case MeasurmentMode.Resistance:
+                case MeasurementMode.Resistance:
                     resistance.text = displayText;
                     break;
             }

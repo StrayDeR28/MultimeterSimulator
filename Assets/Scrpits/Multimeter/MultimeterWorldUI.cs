@@ -8,7 +8,7 @@ namespace Assets.Scrpits.Multimeter
         [SerializeField] private MultimeterController multimeterController;
         [SerializeField] private GameObject arrow;
         [SerializeField] private Color arrowHiglightColor = Color.yellow;
-        [SerializeField] private TMP_Text mainNumbers;
+        [SerializeField] private TMP_Text measurementValue;
         [SerializeField] private float rotationSpeed = 500f;
 
         private Material _arrowMaterial;
@@ -28,7 +28,7 @@ namespace Assets.Scrpits.Multimeter
             }
 
             _arrowTransform = arrow.transform;
-            mainNumbers.text = "0";
+            measurementValue.text = "0";
 
             multimeterController.MeasurementModeChanged += MeasurementModeChanged;
         }
@@ -54,10 +54,28 @@ namespace Assets.Scrpits.Multimeter
             _arrowTransform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, newZ);
         }
 
-        private void MeasurementModeChanged(MeasurmentMode measurmentMode, float currentMeasurment)
+        private void MeasurementModeChanged(MeasurementMode measurementMode, float currentMeasurement)
         {
-            mainNumbers.text = currentMeasurment.ToString("F2");
-            _rotationAngle = MultimeterUIData.GetRotationAngle(measurmentMode);
+            measurementValue.text = FormatForDisplay(currentMeasurement);
+            _rotationAngle = MultimeterUIData.GetRotationAngle(measurementMode);
+        }
+
+        private string FormatForDisplay(float value)
+        {
+            const int maxNumberLength = 5;
+
+            string[] formats = { "F2", "F1", "F0" };
+
+            foreach (string fmt in formats)
+            {
+                string str = value.ToString(fmt);
+                if (str.Length <= maxNumberLength)
+                {
+                    return str;
+                }
+            }
+
+            return value >= 10000 ? "9999" : value <= -10000 ? "-999" : "0";
         }
 
         private void OnDestroy() 

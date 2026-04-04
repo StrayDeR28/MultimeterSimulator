@@ -4,44 +4,44 @@ namespace Assets.Scrpits.Multimeter
 {
     public static class MultimeterUIData
     {
-        public class MeasurmentModeData
+        public class MeasurementModeData
         {
             public string UiSymbol { get; set; }
             public float RotationAngle { get; set; }
         }
 
-        private static readonly Dictionary<MeasurmentMode, MeasurmentModeData> Data = new()
+        private static readonly Dictionary<MeasurementMode, MeasurementModeData> Data = new()
         {
             {
-                MeasurmentMode.Neutral, new MeasurmentModeData
+                MeasurementMode.Neutral, new MeasurementModeData
                 {
                     UiSymbol = "",
                     RotationAngle = 0f
                 }
             },
             {
-                MeasurmentMode.DCVoltage, new MeasurmentModeData
+                MeasurementMode.DCVoltage, new MeasurementModeData
                 {
                     UiSymbol = "V",
                     RotationAngle = 76f
                 }
             },
             {
-                MeasurmentMode.ACVoltage, new MeasurmentModeData
+                MeasurementMode.ACVoltage, new MeasurementModeData
                 {
                     UiSymbol = "~",
                     RotationAngle = 133f
                 }
             },
             {
-                MeasurmentMode.CurrentStrength, new MeasurmentModeData
+                MeasurementMode.CurrentStrength, new MeasurementModeData
                 {
                     UiSymbol = "A",
                     RotationAngle = 150f
                 }
             },
             {
-                MeasurmentMode.Resistance, new MeasurmentModeData
+                MeasurementMode.Resistance, new MeasurementModeData
                 {
                     UiSymbol = "Ω",
                     RotationAngle = 284f
@@ -49,12 +49,12 @@ namespace Assets.Scrpits.Multimeter
             },
         };
 
-        public static string GetUiSymbol(MeasurmentMode mode)
+        public static string GetUiSymbol(MeasurementMode mode)
         {
             return Data[mode].UiSymbol;
         }
 
-        public static float GetRotationAngle(MeasurmentMode mode)
+        public static float GetRotationAngle(MeasurementMode mode)
         {
             return Data[mode].RotationAngle;
         }
