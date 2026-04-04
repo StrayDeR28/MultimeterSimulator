@@ -6,14 +6,15 @@ namespace Assets.Scrpits.Multimeter
 {
     public class MultimeterController : MonoBehaviour
     {
-        public event Action MeasurementModeChanged;
+        public event Action<MeasurmentMode, float> MeasurementModeChanged;
 
         [SerializeField] private DCSource testDCSource; // for test set from inspector
         [SerializeField] private MultimeterArrow arrow;
 
+        public bool IsPointerOnArrow { get; private set; }
+
         private readonly MultimeterModel _multimeterModel = new();
-        private bool _isPointerOnArrow;
-        private int _maxMeasurmentMode = Enum.GetValues(typeof(MultimeterModel.MeasurmentMode)).Length - 1;
+        private readonly int _maxMeasurmentMode = Enum.GetValues(typeof(MeasurmentMode)).Length - 1;
         
         private void Awake()
         {
@@ -30,17 +31,17 @@ namespace Assets.Scrpits.Multimeter
 
         private void OnPointerExitArrow()
         {
-            _isPointerOnArrow = false;
+            IsPointerOnArrow = false;
         }
 
         private void OnPointerEnterArrow()
         {
-            _isPointerOnArrow = true;
+            IsPointerOnArrow = true;
         }
 
         private void Update() 
         {
-            if (!_isPointerOnArrow) 
+            if (!IsPointerOnArrow) 
             {
                 return;
             }
@@ -52,22 +53,53 @@ namespace Assets.Scrpits.Multimeter
             }
 
             int currentIdx = (int)_multimeterModel.сurrentMeasurmentMode;
-
             int newIdx;
+
             if (scroll > 0)
             {
                 newIdx = currentIdx + 1;
-                if (newIdx > _maxMeasurmentMode) newIdx = 0;
+                if (newIdx > _maxMeasurmentMode) 
+                {
+                    newIdx = 0;
+                }
             }
             else
             {
                 newIdx = currentIdx - 1;
-                if (newIdx < 0) newIdx = _maxMeasurmentMode;
+                if (newIdx < 0)
+                {
+                    newIdx = _maxMeasurmentMode;   
+                }
             }
 
-            _multimeterModel.сurrentMeasurmentMode = (MultimeterModel.MeasurmentMode)newIdx;
-            MeasurementModeChanged?.Invoke();
-            Debug.Log($"MesMode upd, new mode: {_multimeterModel.сurrentMeasurmentMode}");
+            _multimeterModel.сurrentMeasurmentMode = (MeasurmentMode)newIdx;
+            MeasurementModeChanged?.Invoke(_multimeterModel.сurrentMeasurmentMode, GetCurrentMeasurment());
+        }
+
+        private float GetCurrentMeasurment()
+        {
+            float currentMeasurment = 0f;
+
+            switch (_multimeterModel.сurrentMeasurmentMode)
+            {
+                case MeasurmentMode.Neutral:
+                    currentMeasurment = 0f;
+                    break;
+                case MeasurmentMode.DCVoltage:
+                    currentMeasurment = _multimeterModel.DCVoltage;
+                    break;
+                case MeasurmentMode.ACVoltage:
+                    currentMeasurment = _multimeterModel.ACVoltage;
+                    break;
+                case MeasurmentMode.CurrentStrength:
+                    currentMeasurment = _multimeterModel.CurrentStrength;
+                    break;
+                case MeasurmentMode.Resistance:
+                    currentMeasurment = _multimeterModel.Resistance;
+                    break;
+            }
+
+            return currentMeasurment;
         }
 
         private void OnDestroy() 
