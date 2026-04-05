@@ -6,114 +6,114 @@ namespace Assets.Scrpits.Multimeter
     public class MultimeterWorldUI : MonoBehaviour
     {
         [SerializeField] private MultimeterController multimeterController;
-        [SerializeField] private GameObject arrow;
+        [SerializeField] private MultimeterModeSwitcher modeSwitcher;
         [SerializeField] private TMP_Text measurementValue;
-        [SerializeField] private Color arrowHighlightEmissionColor = Color.yellow;
+        [SerializeField] private Color modeSwitcherHighlightEmissionColor = Color.yellow;
         [SerializeField] private float emissionIntensity = 0.2f;
-        [SerializeField] private float arrowRotationSpeed = 500f;
+        [SerializeField] private float modeSwitcherRotationSpeed = 500f;
 
-        private Material _arrowMaterial;
-        private Color _baseEmissionColor;
-        private Transform _arrowTransform;
+        private Material _modeSwitcherMaterial;
+        private Color _initiaEmissionColor;
+        private Transform _modeSwitcherTransform;
         private float _rotationAngle = 0f;
         
-        private const string EmissionColorPropertyName = "_EmissionColor";
+        private const int MaxNumberLength = 5;
+        private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
         private void Awake()
         {
-            InitializeArrowMaterial();
-            _arrowTransform = arrow.transform;
+            InitializeModeSwitcherMaterial();
+            _modeSwitcherTransform = modeSwitcher.transform;
             measurementValue.text = "0";
 
-            multimeterController.MeasurementModeChanged += MeasurementModeChanged;
+            multimeterController.MeasurementModeChanged += OnMeasurementModeChanged;
         }
 
-        private void InitializeArrowMaterial()
+        private void InitializeModeSwitcherMaterial()
         {
-            if (!arrow.TryGetComponent(out MeshRenderer renderer))
+            if (!modeSwitcher.gameObject.TryGetComponent(out MeshRenderer renderer))
             {
                 return;
             }
 
-            _arrowMaterial = renderer.material;
-            if (_arrowMaterial == null)
+            _modeSwitcherMaterial = renderer.material;
+            if (_modeSwitcherMaterial == null)
             {
                 return;
             }
             
-            if (_arrowMaterial.HasProperty(EmissionColorPropertyName))
+            if (_modeSwitcherMaterial.HasProperty(EmissionColor))
             {
-                _baseEmissionColor = _arrowMaterial.GetColor(EmissionColorPropertyName);
-                _arrowMaterial.EnableKeyword("_EMISSION");
+                _initiaEmissionColor = _modeSwitcherMaterial.GetColor(EmissionColor);
+                _modeSwitcherMaterial.EnableKeyword("_EMISSION");
             }
             else
             {
-                _baseEmissionColor = Color.black;
+                _initiaEmissionColor = Color.black;
             }
         }
 
         private void Update()
         {
-            UpdateArrowHiglight();
-            RotateArrow();
+            UpdateModeSwitcherHighlight();
+            UpdateModeSwitcherRotation();
         }
 
-        private void UpdateArrowHiglight()
+        private void UpdateModeSwitcherHighlight()
         {
-            if (_arrowMaterial == null)
+            if (_modeSwitcherMaterial == null)
             {
                 return;
             }
 
-            if (multimeterController.IsPointerOnArrow)
+            if (modeSwitcher.IsPointerOnModeSwitcher)
             {
-                HiglightArrow();
+                HighlightModeSwitcher();
             }
             else
             {
-                SetArrowMaterialDefaults();
+                ResetModeSwitcherMaterial();
             }
         }
 
-        private void HiglightArrow()
+        private void HighlightModeSwitcher()
         {
-            if (_arrowMaterial.HasProperty(EmissionColorPropertyName))
+            if (_modeSwitcherMaterial.HasProperty(EmissionColor))
             {
-                Color emissionColor = arrowHighlightEmissionColor * emissionIntensity;
-                _arrowMaterial.SetColor(EmissionColorPropertyName, emissionColor);
+                Color emissionColor = modeSwitcherHighlightEmissionColor * emissionIntensity;
+                _modeSwitcherMaterial.SetColor(EmissionColor, emissionColor);
             }
         }
 
-        private void SetArrowMaterialDefaults()
+        private void ResetModeSwitcherMaterial()
         {
-            if (_arrowMaterial.HasProperty(EmissionColorPropertyName))
+            if (_modeSwitcherMaterial.HasProperty(EmissionColor))
             {
-                _arrowMaterial.SetColor(EmissionColorPropertyName, _baseEmissionColor);
+                _modeSwitcherMaterial.SetColor(EmissionColor, _initiaEmissionColor);
             }
         }
 
-        private void RotateArrow()
+        private void UpdateModeSwitcherRotation()
         {
-            Vector3 currentRotation = _arrowTransform.eulerAngles;
-            float newZ = Mathf.MoveTowardsAngle(currentRotation.z, _rotationAngle, arrowRotationSpeed * Time.deltaTime);
-            _arrowTransform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, newZ);
+            Vector3 currentRotation = _modeSwitcherTransform.eulerAngles;
+            float newZ = Mathf.MoveTowardsAngle(currentRotation.z, _rotationAngle, modeSwitcherRotationSpeed * Time.deltaTime);
+            _modeSwitcherTransform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, newZ);
         }
 
-        private void MeasurementModeChanged(MeasurementMode measurementMode, float currentMeasurement)
+        private void OnMeasurementModeChanged(MeasurementMode measurementMode, float currentMeasurement)
         {
-            measurementValue.text = FormatForDisplay(currentMeasurement);
+            measurementValue.text = FormatForAllowedSymbolsCountDisplay(MaxNumberLength, currentMeasurement);
             _rotationAngle = MultimeterUIData.GetRotationAngle(measurementMode);
         }
 
-        private static string FormatForDisplay(float value)
+        private static string FormatForAllowedSymbolsCountDisplay(int symbolsCount, float value)
         {
-            const int maxNumberLength = 5;
             string[] formats = { "F2", "F1", "F0" };
 
             foreach (string fmt in formats)
             {
                 string str = value.ToString(fmt);
-                if (str.Length <= maxNumberLength)
+                if (str.Length <= symbolsCount)
                     return str;
             }
 
@@ -122,7 +122,7 @@ namespace Assets.Scrpits.Multimeter
 
         private void OnDestroy()
         {
-            multimeterController.MeasurementModeChanged -= MeasurementModeChanged;
+            multimeterController.MeasurementModeChanged -= OnMeasurementModeChanged;
         }
     }
 }

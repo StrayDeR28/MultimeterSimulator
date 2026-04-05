@@ -1461,7 +1461,7 @@ GameObject:
   - component: {fileID: 7357889777741999231}
   - component: {fileID: 7357889777741999230}
   m_Layer: 0
-  m_Name: Arrow
+  m_Name: ModeSwitcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1575,7 +1575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testDCSource: {fileID: 11400000, guid: 117e9fbe05a5e1944b9b3020e3263392, type: 2}
-  arrow: {fileID: 7357889777741999230}
+  modeSwitcher: {fileID: 7357889777741999230}
 --- !u!114 &3469287838110628005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1589,11 +1589,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multimeterController: {fileID: 3469287838110628004}
-  arrow: {fileID: 432906490160310599}
+  modeSwitcher: {fileID: 7357889777741999230}
   measurementValue: {fileID: 1465674955}
-  arrowHighlightEmissionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  modeSwitcherHighlightEmissionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   emissionIntensity: 0.2
-  arrowRotationSpeed: 500
+  modeSwitcherRotationSpeed: 500
 --- !u!23 &4226994463787334229
 MeshRenderer:
   m_ObjectHideFlags: 0

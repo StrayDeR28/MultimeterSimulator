@@ -46,7 +46,7 @@ namespace Assets.Scrpits.Multimeter
                 return;
             }
 
-            string displayText = $"{symbol}: {currentMeasurement.ToString("F2")}";
+            string displayText = $"{symbol}: {currentMeasurement:F2}";
 
             switch (measurementMode)
             {

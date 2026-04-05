@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76d0ded0fd7914e43a099818bb6e5af1, type: 3}
   m_Name: TestDCSource
   m_EditorClassIdentifier: 
-  Resistance: 1000
-  Power: 400
+  resistance: 1000
+  power: 400
