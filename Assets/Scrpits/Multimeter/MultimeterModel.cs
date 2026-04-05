@@ -22,10 +22,10 @@ namespace Assets.Scrpits.Multimeter
     }
     public enum MeasurementMode
     {
-        Neutral,
-        DCVoltage,
-        ACVoltage,
-        CurrentStrength,
-        Resistance
+        Neutral = 0,
+        DCVoltage = 1,
+        ACVoltage = 2,
+        CurrentStrength = 3,
+        Resistance = 4
     }
 }

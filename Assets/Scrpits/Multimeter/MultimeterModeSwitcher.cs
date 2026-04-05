@@ -4,19 +4,18 @@ using UnityEngine.EventSystems;
 
 namespace Assets.Scrpits.Multimeter
 {
-    public class MultimeterArrow : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class MultimeterModeSwitcher : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        public event Action PointerEnterArrow;
-        public event Action PointerExitArrow;
+        public bool IsPointerOnModeSwitcher { get; private set; }
         
         public void OnPointerEnter(PointerEventData eventData)
         {
-            PointerEnterArrow?.Invoke();
+            IsPointerOnModeSwitcher = true;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            PointerExitArrow?.Invoke();
+            IsPointerOnModeSwitcher = false;
         }
     }
 }

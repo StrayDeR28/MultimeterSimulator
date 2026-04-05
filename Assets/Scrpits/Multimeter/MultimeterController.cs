@@ -10,22 +10,16 @@ namespace Assets.Scrpits.Multimeter
         public event Action<MeasurementMode, float> MeasurementModeChanged;
 
         [SerializeField] private DCSource testDCSource; // for test task
-        [SerializeField] private MultimeterArrow arrow;
-
-        public bool IsPointerOnArrow { get; private set; }
+        [SerializeField] private MultimeterModeSwitcher modeSwitcher;
 
         private readonly MultimeterModel _multimeterModel = new();
-        private readonly int _maxMeasurementMode = Enum.GetValues(typeof(MeasurementMode)).Length - 1;
+        private static readonly int _maxMeasurementMode = Enum.GetValues(typeof(MeasurementMode)).Length - 1;
         private Dictionary<MeasurementMode, Func<float>> _measurementGetters;
         
         private void Awake()
         {
             InitializeMeasurementGetters();
-            
             SetNewDCSource(testDCSource); // for test task
-
-            arrow.PointerEnterArrow += OnPointerEnterArrow;
-            arrow.PointerExitArrow += OnPointerExitArrow;
         }
 
         private void InitializeMeasurementGetters()
@@ -42,22 +36,12 @@ namespace Assets.Scrpits.Multimeter
 
         public void SetNewDCSource(DCSource dCSource)
         {
-            _multimeterModel.MeasureNewDCSource(dCSource.Resistance, dCSource.Power);
-        }
-
-        private void OnPointerExitArrow()
-        {
-            IsPointerOnArrow = false;
-        }
-
-        private void OnPointerEnterArrow()
-        {
-            IsPointerOnArrow = true;
+            _multimeterModel.MeasureNewDCSource(dCSource.resistance, dCSource.power);
         }
 
         private void Update() 
         {
-            if (IsPointerOnArrow) 
+            if (modeSwitcher.IsPointerOnModeSwitcher) 
             {
                 HandleScrollInput();
             }
@@ -90,18 +74,12 @@ namespace Assets.Scrpits.Multimeter
             }
             
             _multimeterModel.CurrentMeasurementMode = (MeasurementMode)newIdx;
-            MeasurementModeChanged?.Invoke(_multimeterModel.CurrentMeasurementMode, GetCurrentMeasurement());
+            MeasurementModeChanged?.Invoke(_multimeterModel.CurrentMeasurementMode, GetCurrentMeasurementValue());
         }
 
-        private float GetCurrentMeasurement()
+        private float GetCurrentMeasurementValue()
         {
             return _measurementGetters[_multimeterModel.CurrentMeasurementMode]();
-        }
-
-        private void OnDestroy() 
-        {
-            arrow.PointerEnterArrow -= OnPointerEnterArrow;
-            arrow.PointerExitArrow -= OnPointerExitArrow;
         }
     }
 }
